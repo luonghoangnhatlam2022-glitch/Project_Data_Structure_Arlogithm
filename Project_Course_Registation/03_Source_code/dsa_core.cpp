@@ -71,6 +71,33 @@ unordered_map<string, DanhSachCho> ds_cho;
 // DANG_KY, VAO_HANG_CHO, RUT_HANG_CHO, HUY_MON, DON_LEN_CHINH_THUC
 // Dung nhu la stack luu cac thao tac tren
 vector<LichSu> nhat_ky_he_thong;
+
+
+// Lay thoi gian hien tai dang chuoi de ghi log
+string lay_thoi_gian_hien_tai()
+{
+    auto hien_tai = chrono::system_clock::now();
+    auto thoi_gian_c = chrono::system_clock::to_time_t(hien_tai);
+    stringstream ss;
+    ss << put_time(localtime(&thoi_gian_c), "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+}
+
+void ghi_nhat_ky(string hanh_dong, string mssv, string ma_mon)
+{
+    nhat_ky_he_thong.push_back({lay_thoi_gian_hien_tai(), hanh_dong, mssv, ma_mon});
+}
+
+// Tra ra con tro tro den sinh vien co mssv
+SinhVien* tim_sinh_vien(string mssv)
+{
+    if (ds_sinh_vien.find(mssv) != ds_sinh_vien.end())
+    {
+        return &ds_sinh_vien[mssv];
+    }
+    return nullptr;
+}
+
 string lay_thoi_gian_hien_tai() {
     auto hien_tai = chrono::system_clock::now();
     auto thoi_gian_c = chrono::system_clock::to_time_t(hien_tai);
