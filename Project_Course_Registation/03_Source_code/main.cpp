@@ -33,7 +33,7 @@ int main() {
 
     // 3. TANG PERSISTENCE: Tu dong ghi nhat ky thao tac ra file CSV truoc khi thoat
     cout << "\nDang luu nhat ky he thong truoc khi tat...\n";
-    luu_nhat_ky_ra_file("02_Data/operation_history.csv");
+    luu_nhat_ky_ra_file("../02_Data/operation_history.csv");
 
     cout << "====================================================\n";
     cout << "   CHUONG TRINH DA KET THUC VA LUU DU LIEU AN TOAN! \n";
