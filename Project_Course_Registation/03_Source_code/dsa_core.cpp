@@ -88,37 +88,6 @@ void ghi_nhat_ky(string hanh_dong, string mssv, string ma_mon)
     nhat_ky_he_thong.push_back({lay_thoi_gian_hien_tai(), hanh_dong, mssv, ma_mon});
 }
 
-// Tra ra con tro tro den sinh vien co mssv
-SinhVien* tim_sinh_vien(string mssv)
-{
-    if (ds_sinh_vien.find(mssv) != ds_sinh_vien.end())
-    {
-        return &ds_sinh_vien[mssv];
-    }
-    return nullptr;
-}
-
-string lay_thoi_gian_hien_tai() {
-    auto hien_tai = chrono::system_clock::now();
-    auto thoi_gian_c = chrono::system_clock::to_time_t(hien_tai);
-    stringstream ss;
-    ss << put_time(localtime(&thoi_gian_c), "%Y-%m-%d %H:%M:%S");
-    return ss.str();
-}
-
-// Hàm hỗ trợ: Ghi lại một thao tác vào mảng nhật ký
-void ghi_nhat_ky(string hanh_dong, string mssv, string ma_mon) {
-    nhat_ky_he_thong.push_back({lay_thoi_gian_hien_tai(), hanh_dong, mssv, ma_mon});
-}
-
-// Tìm sinh viên bằng Hash Map -> Độ phức tạp trung bình O(1)
-SinhVien* tim_sinh_vien(string mssv) {
-    if (ds_sinh_vien.find(mssv) != ds_sinh_vien.end()) {
-        return &ds_sinh_vien[mssv]; // Trả về con trỏ trỏ đến vùng nhớ của SV
-    }
-    return nullptr;
-}
-
 // Tìm môn học bằng Hash Map -> Độ phức tạp trung bình O(1)
 HocPhan *tim_hoc_phan(string ma_mon) {
     if (ds_hoc_phan.find(ma_mon) != ds_hoc_phan.end()) {
@@ -175,13 +144,13 @@ string huy_mon_chinh_thuc(string ma_mon, string mssv) {
     auto& lop_chinh_thuc = ds_chinh_thuc[ma_mon];
     int vi_tri = -1;
     for (int i = 0; i < (int)lop_chinh_thuc.size(); ++i) {
-        if (lop_chinh_thuc[i] == mssv) {
+        if (lop_chinh_thuc.find(mssv) != lop_chinh_thuc.end()) {
             vi_tri = i;
             break;
         }
     }
 
-    if (vi_tri == -1) return "SINH_VIEN_KHONG_CO_TRONG_LOP";
+    if (lop_chinh_thuc.find(mssv) == lop_chinh_thuc.end()) return "SINH_VIEN_KHONG_CO_TRONG_LOP";
 
     lop_chinh_thuc.erase(lop_chinh_thuc.begin() + vi_tri);
 
@@ -193,7 +162,7 @@ string huy_mon_chinh_thuc(string ma_mon, string mssv) {
         hang_cho.hang_doi.pop_front();
         hang_cho.vi_tri_node.erase(mssv_duoc_chon);
 
-        lop_chinh_thuc.push_back(mssv_duoc_chon);
+        lop_chinh_thuc.insert(mssv_duoc_chon); // O(1)
         ghi_nhat_ky("DON_LEN_CHINH_THUC", mssv_duoc_chon, ma_mon);
         return "DA_HUY_VA_DON_SINH_VIEN_" + mssv_duoc_chon;
     } else {
