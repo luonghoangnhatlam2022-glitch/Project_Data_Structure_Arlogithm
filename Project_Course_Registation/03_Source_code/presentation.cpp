@@ -21,7 +21,7 @@ void in_menu()
     cout << "7. Chay file test \n";
     cout << "0. Luu du lieu va Thoat chuong trinh\n";
     cout << "============================================\n";
-    cout << "Nhap lua chon cua ban (0 - 6): ";
+    cout << "Nhap lua chon cua ban (0 - 7): ";
 }
 
 void man_hinh_tim_sinh_vien() {
