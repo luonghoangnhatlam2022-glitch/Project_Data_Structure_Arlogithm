@@ -69,7 +69,7 @@ void dem_so_sinh_vien()
 
 void sinh_data(ll n)
 {
-    ofstream tep_tin("../02_Data/students_1k.csv");
+    ofstream tep_tin("../02_Data/students_test.csv");
 
     ll dem = 0;
     string hp;
