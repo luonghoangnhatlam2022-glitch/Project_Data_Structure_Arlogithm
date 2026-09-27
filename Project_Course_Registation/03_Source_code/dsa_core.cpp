@@ -142,3 +142,49 @@ vector<LichSu> lay_lich_su_gan_day(int so_luong) {
     return ket_qua;
 }
 
+string huy_mon_chinh_thuc(string ma_mon, string mssv) {
+    if (ds_hoc_phan.find(ma_mon) == ds_hoc_phan.end()) return "LOI_MON_KHONG_TON_TAI";
+
+    auto& lop_chinh_thuc = ds_chinh_thuc[ma_mon];
+    int vi_tri = -1;
+    for (int i = 0; i < (int)lop_chinh_thuc.size(); ++i) {
+        if (lop_chinh_thuc[i] == mssv) {
+            vi_tri = i;
+            break;
+        }
+    }
+
+    if (vi_tri == -1) return "SINH_VIEN_KHONG_CO_TRONG_LOP";
+
+    lop_chinh_thuc.erase(lop_chinh_thuc.begin() + vi_tri);
+
+    ghi_nhat_ky("HUY_MON", mssv, ma_mon);
+    HocPhan& hp = ds_hoc_phan[ma_mon];
+    auto& hang_cho = ds_cho[ma_mon];
+    if (!hang_cho.hang_doi.empty()) {
+        string mssv_duoc_chon = hang_cho.hang_doi.front();
+        hang_cho.hang_doi.pop_front();
+        hang_cho.vi_tri_node.erase(mssv_duoc_chon);
+
+        lop_chinh_thuc.push_back(mssv_duoc_chon);
+        ghi_nhat_ky("DON_LEN_CHINH_THUC", mssv_duoc_chon, ma_mon);
+        return "DA_HUY_VA_DON_SINH_VIEN_" + mssv_duoc_chon;
+    } else {
+        hp.si_so_hien_tai--;
+        return "HUY_THANH_CONG";
+    }
+}
+bool rut_khoi_hang_cho(string ma_mon, string mssv) {
+    if (ds_hoc_phan.find(ma_mon) == ds_hoc_phan.end()) return false;
+
+    auto& hang_cho = ds_cho[ma_mon];
+    auto it = hang_cho.vi_tri_node.find(mssv);
+    if (it == hang_cho.vi_tri_node.end()) return false; 
+
+    hang_cho.hang_doi.erase(it->second);
+    hang_cho.vi_tri_node.erase(it);
+
+    ghi_nhat_ky("RUT_HANG_CHO", mssv, ma_mon);
+    return true;
+}
+
