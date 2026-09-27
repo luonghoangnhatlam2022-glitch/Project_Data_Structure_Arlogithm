@@ -71,6 +71,24 @@ unordered_map<string, DanhSachCho> ds_cho;
 // DANG_KY, VAO_HANG_CHO, RUT_HANG_CHO, HUY_MON, DON_LEN_CHINH_THUC
 // Dung nhu la stack luu cac thao tac tren
 vector<LichSu> nhat_ky_he_thong;
+SinhVien* tim_sinh_vien(string mssv)
+{
+    if (ds_sinh_vien.find(mssv) != ds_sinh_vien.end())
+    {
+        return &ds_sinh_vien[mssv];
+    }
+    return nullptr;
+}
+
+// MC1: Tra cuu thong tin hoc phan theo ma mon - O(1)
+HocPhan *tim_hoc_phan(string ma_mon)
+{
+    if (ds_hoc_phan.find(ma_mon) != ds_hoc_phan.end())
+    {
+        return &ds_hoc_phan[ma_mon];
+    }
+    return nullptr;
+}
 
 
 // Lay thoi gian hien tai dang chuoi de ghi log
@@ -153,12 +171,13 @@ string huy_mon_chinh_thuc(string ma_mon, string mssv) {
     HocPhan& hp = ds_hoc_phan[ma_mon];
     auto& hang_cho = ds_cho[ma_mon];
 
+    // Kiem tra danh sach cho, lay nguoi dau tien vao lop
     if (!hang_cho.hang_doi.empty()) {
         string mssv_duoc_chon = hang_cho.hang_doi.front();
         hang_cho.hang_doi.pop_front();
         hang_cho.vi_tri_node.erase(mssv_duoc_chon);
 
-        lop_chinh_thuc[mssv_duoc_chon] = true;
+        lop_chinh_thuc.insert(mssv_duoc_chon);
         
         ghi_nhat_ky("DON_LEN_CHINH_THUC", mssv_duoc_chon, ma_mon);
         return "DA_HUY_VA_DON_SINH_VIEN_" + mssv_duoc_chon;
