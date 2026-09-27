@@ -4,8 +4,8 @@
 #include <vector>
 #include <fstream>
 
-#include "../03_SourceCode/dsa_core.cpp"
-#include "../03_SourceCode/persistence.cpp"
+#include "../03_Source_Code/dsa_core.cpp"
+#include "../03_Source_Code/persistence.cpp"
 
 using namespace std;
 

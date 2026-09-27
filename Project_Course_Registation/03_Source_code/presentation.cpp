@@ -3,6 +3,7 @@
 #include <iostream>
 #include "presentation.cpp"
 #include "dsa_core.cpp" // Import phần xử lý lõi để gọi hàm
+#include "../04_Tests_Benchmark/benchmark.cpp"
 
 using namespace std;
 
@@ -127,6 +128,10 @@ void man_hinh_xem_lich_su() {
     cout << "-------------------------------------------\n";
 }
 
+void man_hinh_chay_file_test(string duong_dan_file)
+    {
+        Benchmark(duong_dan_file);
+    }
 
 // Vòng lặp điều khiển chính của giao diện
 void chay_giao_dien() {
@@ -152,6 +157,9 @@ void chay_giao_dien() {
             case 4: man_hinh_huy_mon(); break;
             case 5: man_hinh_rut_hang_cho(); break;
             case 6: man_hinh_xem_lich_su(); break;
+            case 7:
+                man_hinh_chay_file_test("../02_Data/students_test.csv");
+                break;
             default:
                 cout << "[Loi] Lua chon khong hop le, vui long chon lai!\n";
                 break;
