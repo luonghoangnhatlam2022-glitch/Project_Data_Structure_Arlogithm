@@ -6,17 +6,21 @@
 
 using namespace std;
 
-void in_menu() {
+void in_menu()
+{
     cout << "\n============================================\n";
-    cout << "    HE THONG DANG KY HOC PHAN & WAITLIST   \n";
+    cout << "     HE THONG DANG KY HOC PHAN & WAITLIST   \n";
     cout << "============================================\n";
     cout << "1. Tra cuu thong tin Sinh vien \n";
     cout << "2. Tra cuu thong tin Hoc phan \n";
     cout << "3. Dang ky Mon hoc \n";
+    cout << "4. Huy dang ky Mon hoc chinh thuc \n";
+    cout << "5. Rut khoi Danh sach cho \n";
     cout << "6. Xem Lich su Thao tac gan nhat \n";
-    cout << "0. Thoat chuong trinh\n";
+    cout << "7. Chay file test \n";
+    cout << "0. Luu du lieu va Thoat chuong trinh\n";
     cout << "============================================\n";
-    cout << "Nhap lua chon: ";
+    cout << "Nhap lua chon cua ban (0 - 6): ";
 }
 
 void man_hinh_tim_sinh_vien() {
