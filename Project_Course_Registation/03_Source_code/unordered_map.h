@@ -3,7 +3,6 @@
 
 template <typename K, typename V>
 struct unordered_map {
-private:
     struct Node {
         K first;
         V second;
@@ -21,7 +20,6 @@ private:
         return hash;
     }
 
-public:
     unordered_map() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             table[i] = nullptr;
