@@ -1,6 +1,8 @@
+#pragma once
+
 #include <iostream>
-#include "presentation.h"
-#include "dsa_core.h" // Import phần xử lý lõi để gọi hàm
+#include "presentation.cpp"
+#include "dsa_core.cpp" // Import phần xử lý lõi để gọi hàm
 
 using namespace std;
 
