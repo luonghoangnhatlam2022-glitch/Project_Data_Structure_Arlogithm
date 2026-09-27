@@ -106,13 +106,6 @@ void ghi_nhat_ky(string hanh_dong, string mssv, string ma_mon)
     nhat_ky_he_thong.push_back({lay_thoi_gian_hien_tai(), hanh_dong, mssv, ma_mon});
 }
 
-// Tìm môn học bằng Hash Map -> Độ phức tạp trung bình O(1)
-HocPhan *tim_hoc_phan(string ma_mon) {
-    if (ds_hoc_phan.find(ma_mon) != ds_hoc_phan.end()) {
-        return &ds_hoc_phan[ma_mon];
-    }
-    return nullptr;
-}
 
 // Chức năng chính: Xử lý logic đăng ký hoặc đưa vào hàng chờ
 string dang_ky_mon(string ma_mon, string mssv) {

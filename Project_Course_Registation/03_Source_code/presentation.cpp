@@ -57,49 +57,6 @@ void man_hinh_dang_ky() {
     cout << "[Thong bao] " << ket_qua << "\n";
 }
 
-void man_hinh_xem_lich_su() {
-    int k;
-    cout << "-> Nhap so thao tac muon xem: ";
-    if (!(cin >> k) || k <= 0) {
-        cout << "[Loi] So luong khong hop le!\n";
-        return;
-    }
-
-    vector<LichSu> nhat_ky = lay_lich_su_gan_day(k);
-    for (const auto& entry : nhat_ky) {
-        cout << "[" << entry.thoi_gian << "] " << entry.hanh_dong
-             << " | SV: " << entry.mssv << " | Mon: " << entry.ma_mon << "\n";
-    }
-}
-
-// Vòng lặp điều hướng của toàn bộ chương trình
-void chay_giao_dien() {
-    int lua_chon = -1;
-    while (true) {
-        in_menu();
-
-        // Bắt lỗi người dùng nhập chữ thay vì số để tránh crash chương trình
-        if (!(cin >> lua_chon)) {
-            cin.clear(); // Xóa cờ lỗi
-            cin.ignore(10000, '\n'); // Bỏ qua bộ nhớ đệm
-            cout << "[Loi] Vui long nhap so hop le!\n";
-            continue;
-        }
-
-        if (lua_chon == 0) {
-            cout << "Thoat chuong trinh...\n";
-            break;
-        }
-
-        switch (lua_chon) {
-            case 1: man_hinh_tim_sinh_vien(); break;
-            case 2: man_hinh_tim_hoc_phan(); break;
-            case 3: man_hinh_dang_ky(); break;
-            case 6: man_hinh_xem_lich_su(); break;
-            default: cout << "[Loi] Lua chon khong hop le!\n"; break;
-        }
-    }
-}
 // Màn hình 1: Hủy môn chính thức
 void man_hinh_huy_mon() {
     string ma_mh, ma_sv;
@@ -189,18 +146,15 @@ void chay_giao_dien() {
         }
 
         switch (lua_chon) {
-        case 1:
-            man_hinh_huy_mon();
-            break;
-        case 2:
-            man_hinh_rut_hang_cho();
-            break;
-        case 3:
-            man_hinh_xem_lich_su();
-            break;
-        default:
-            cout << "[Loi] Lua chon khong hop le, vui long chon lai!\n";
-            break;
+            case 1: man_hinh_tim_sinh_vien(); break;
+            case 2: man_hinh_tim_hoc_phan(); break;
+            case 3: man_hinh_dang_ky(); break;
+            case 4: man_hinh_huy_mon(); break;
+            case 5: man_hinh_rut_hang_cho(); break;
+            case 6: man_hinh_xem_lich_su(); break;
+            default:
+                cout << "[Loi] Lua chon khong hop le, vui long chon lai!\n";
+                break;
         }
     }
 }
