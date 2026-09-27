@@ -1,6 +1,9 @@
 //
 // Created by Lenovo on 9/27/2026.
 //
+//
+// Created by Lenovo on 9/27/2026.
+//
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -60,7 +63,6 @@ bool nap_du_lieu_sinh_vien(string duong_dan_file) {
     cout << "[Thanh cong] Da nap " << dem_sinh_vien << " sinh vien vao RAM." << endl;
     return true;
 }
-
 bool nap_du_lieu_hoc_phan(string duong_dan_file) {
     ifstream tep_tin(duong_dan_file);
     if (!tep_tin.is_open()) {
@@ -98,7 +100,6 @@ bool nap_du_lieu_hoc_phan(string duong_dan_file) {
     return true;
 }
 
-
 bool luu_nhat_ky_ra_file(string duong_dan_file) {
     ofstream tep_tin(duong_dan_file);
     if (!tep_tin.is_open()) {
@@ -121,3 +122,5 @@ bool luu_nhat_ky_ra_file(string duong_dan_file) {
     cout << "[Thanh cong] Da luu nhat ky hoat dong ra file." << endl;
     return true;
 }
+
+
