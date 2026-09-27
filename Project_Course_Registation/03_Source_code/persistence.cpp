@@ -20,7 +20,6 @@ using namespace std;
 // 2. Doc file danh sach hoc phan (courses.csv)
 // 3. Luu nhat ky he thong ra file CSV truoc khi tat chuong trinh
 
-
 bool nap_du_lieu_sinh_vien(string duong_dan_file) {
     ifstream tep_tin(duong_dan_file);
 
@@ -64,8 +63,6 @@ bool nap_du_lieu_sinh_vien(string duong_dan_file) {
     cout << "[Thanh cong] Da nap " << dem_sinh_vien << " sinh vien vao RAM." << endl;
     return true;
 }
-
-
 bool nap_du_lieu_hoc_phan(string duong_dan_file) {
     ifstream tep_tin(duong_dan_file);
     if (!tep_tin.is_open()) {
@@ -103,8 +100,6 @@ bool nap_du_lieu_hoc_phan(string duong_dan_file) {
     return true;
 }
 
-
-
 bool luu_nhat_ky_ra_file(string duong_dan_file) {
     ofstream tep_tin(duong_dan_file);
     if (!tep_tin.is_open()) {
@@ -127,3 +122,5 @@ bool luu_nhat_ky_ra_file(string duong_dan_file) {
     cout << "[Thanh cong] Da luu nhat ky hoat dong ra file." << endl;
     return true;
 }
+
+
