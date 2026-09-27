@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 // Nhúng các tầng theo đúng thứ tự phụ thuộc:
