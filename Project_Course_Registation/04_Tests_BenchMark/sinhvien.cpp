@@ -151,8 +151,9 @@ int main()
     vector<pair<int, int>> sinh;
 
     vector<string> nganh = {"CNTT", "ATTT", "KTDL", "AI"};
-    int n = 200;
-
+    int n ;
+    cout<<"Nhap so luong sinh vien: ";
+    cin>>n;
     Ho_Ten(name, n);
     Ngay_Thang(sinh, n);
 
@@ -162,7 +163,7 @@ int main()
 
     file << "mssv,ho_ten,ma_nganh,ngay_sinh\n";
 
-    int mssv = 25000;
+    int mssv = 250000;
     // 4. Ghi từng dòng dữ liệu
     for (int i = 0; i < n; i++)
     {
