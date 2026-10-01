@@ -1,6 +1,6 @@
 #pragma once
 
-//Thu vien C++
+// Thư viện C++
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -9,13 +9,17 @@
 #include <iomanip>
 #include <sstream>
 
-// Tu cai dat
+// Tự cài đặt
 #include "list.h"
 #include "unordered_map.h"
 
-using namespace std;
+// KHÔNG dùng "using namespace std;" để tránh đụng độ với custom list và unordered_map
+using std::string;
+using std::vector;
+using std::unordered_set;
+using std::stringstream;
 
-// Thong tin sinh vien
+// Thông tin sinh viên
 struct SinhVien
 {
     string mssv;
@@ -24,7 +28,7 @@ struct SinhVien
     string ma_nganh;
 };
 
-// Thong tin hoc phan
+// Thông tin học phần
 struct HocPhan
 {
     string ma_mon;
@@ -33,7 +37,7 @@ struct HocPhan
     int si_so_hien_tai;
 };
 
-// Thao tac cua sinh vien doi voi mon hoc
+// Thao tác của sinh viên đối với môn học
 struct LichSu
 {
     string thoi_gian;
@@ -42,46 +46,44 @@ struct LichSu
     string ma_mon;
 };
 
-// Luu danh sach cho cua tung mon hoc
-// list dung de luu thu tu cua sinh vien trong hang doi
-// hash table luu dia chi cua phan tu trong list: dam bao FIFO + kha nang tim kiem, xoa
+// Lưu danh sách chờ của từng môn học
+// list dùng để lưu thứ tự của sinh viên trong hàng đợi
+// hash table lưu địa chỉ của phần tử trong list: đảm bảo FIFO + khả năng tìm kiếm, xóa O(1)
 struct DanhSachCho
 {
     list hang_doi;
-    unordered_map<string, Node*> vi_tri_node;
+    unordered_map<string, Node*> vi_tri_node; // Giả định struct Node được định nghĩa public trong list.h
 };
 
-// Hash table luu danh sach tat ca sinh vien
-// <mssv, SinhVien>
+// Hash table lưu danh sách tất cả sinh viên <mssv, SinhVien>
 unordered_map<string, SinhVien> ds_sinh_vien;
 
-// Hash table luu danh sach tat ca mon hoc
-// <ma_mon, HocPhan>
+// Hash table lưu danh sách tất cả môn học <ma_mon, HocPhan>
 unordered_map<string, HocPhan> ds_hoc_phan;
 
-// Hash table luu danh sach sinh vien chinh thuc cua mot mon hoc
-// Hash set luu danh sach mssv cua sinh vien
+// Hash table lưu danh sách sinh viên chính thức của một môn học
 // <ma_mon, hash_set<mssv> >
 unordered_map<string, unordered_set<string>> ds_chinh_thuc;
 
-// Danh sach cho dang ky cua tung mon
-// <ma_mon, mssv>
+// Danh sách chờ đăng ký của từng môn <ma_mon, DanhSachCho>
 unordered_map<string, DanhSachCho> ds_cho;
 
 // DANG_KY, VAO_HANG_CHO, RUT_HANG_CHO, HUY_MON, DON_LEN_CHINH_THUC
-// Dung nhu la stack luu cac thao tac tren
 vector<LichSu> nhat_ky_he_thong;
+
+
+// MC1: Tra cứu sinh viên theo MSSV - O(1)
 SinhVien* tim_sinh_vien(string mssv)
 {
     if (ds_sinh_vien.find(mssv) != ds_sinh_vien.end())
     {
-        return &ds_sinh_vien[mssv];
+        return &ds_sinh_vien[mssv]; // operator[] đã được viết để trả về reference
     }
     return nullptr;
 }
 
-// MC1: Tra cuu thong tin hoc phan theo ma mon - O(1)
-HocPhan *tim_hoc_phan(string ma_mon)
+// MC1: Tra cứu thông tin học phần theo mã môn - O(1)
+HocPhan* tim_hoc_phan(string ma_mon)
 {
     if (ds_hoc_phan.find(ma_mon) != ds_hoc_phan.end())
     {
@@ -90,14 +92,13 @@ HocPhan *tim_hoc_phan(string ma_mon)
     return nullptr;
 }
 
-
-// Lay thoi gian hien tai dang chuoi de ghi log
+// Lấy thời gian hiện tại dạng chuỗi để ghi log
 string lay_thoi_gian_hien_tai()
 {
-    auto hien_tai = chrono::system_clock::now();
-    auto thoi_gian_c = chrono::system_clock::to_time_t(hien_tai);
+    auto hien_tai = std::chrono::system_clock::now();
+    auto thoi_gian_c = std::chrono::system_clock::to_time_t(hien_tai);
     stringstream ss;
-    ss << put_time(localtime(&thoi_gian_c), "%Y-%m-%d %H:%M:%S");
+    ss << std::put_time(std::localtime(&thoi_gian_c), "%Y-%m-%d %H:%M:%S");
     return ss.str();
 }
 
@@ -109,7 +110,7 @@ void ghi_nhat_ky(string hanh_dong, string mssv, string ma_mon)
 
 // Chức năng chính: Xử lý logic đăng ký hoặc đưa vào hàng chờ
 string dang_ky_mon(string ma_mon, string mssv) {
-    // Bước 1: Kiểm tra tính hợp lệ của dữ liệu đầu vào
+    // Bước 1: Kiểm tra tính hợp lệ
     if (ds_hoc_phan.find(ma_mon) == ds_hoc_phan.end()) return "LOI_MON_KHONG_TON_TAI";
     if (ds_sinh_vien.find(mssv) == ds_sinh_vien.end()) return "LOI_SINH_VIEN_KHONG_TON_TAI";
 
@@ -132,7 +133,6 @@ string dang_ky_mon(string ma_mon, string mssv) {
     }
 
     // Bước 5: Nếu lớp ĐÃ ĐẦY -> Đẩy vào cuối danh sách chờ (Waitlist)
-    // Lưu lại con trỏ Node vào Hash Map để sau này tìm kiếm/rút môn với thời gian O(1)
     hang_cho.vi_tri_node[mssv] = hang_cho.hang_doi.push_back(mssv);
     ghi_nhat_ky("VAO_HANG_CHO", mssv, ma_mon);
     return "THANH_CONG_VAO_HANG_CHO";
@@ -142,18 +142,17 @@ string dang_ky_mon(string ma_mon, string mssv) {
 vector<LichSu> lay_lich_su_gan_day(int so_luong) {
     vector<LichSu> ket_qua;
     int dem = 0;
-    // Dùng rbegin() và rend() để duyệt mảng từ cuối lên đầu (mới nhất -> cũ nhất)
     for (auto it = nhat_ky_he_thong.rbegin(); it != nhat_ky_he_thong.rend() && dem < so_luong; ++it, ++dem) {
         ket_qua.push_back(*it);
     }
     return ket_qua;
 }
 
+// Giải quyết xung đột thiết kế: Cập nhật đồng thời Hàng đợi & Hash Map
 string huy_mon_chinh_thuc(string ma_mon, string mssv) {
     if (ds_hoc_phan.find(ma_mon) == ds_hoc_phan.end()) return "LOI_MON_KHONG_TON_TAI";
 
     auto& lop_chinh_thuc = ds_chinh_thuc[ma_mon];
-
     if (lop_chinh_thuc.find(mssv) == lop_chinh_thuc.end()) {
         return "SINH_VIEN_KHONG_CO_TRONG_LOP";
     }
@@ -164,14 +163,14 @@ string huy_mon_chinh_thuc(string ma_mon, string mssv) {
     HocPhan& hp = ds_hoc_phan[ma_mon];
     auto& hang_cho = ds_cho[ma_mon];
 
-    // Kiem tra danh sach cho, lay nguoi dau tien vao lop
+    // Kiểm tra danh sách chờ, lấy người đầu tiên đẩy lên lớp
     if (!hang_cho.hang_doi.empty()) {
         string mssv_duoc_chon = hang_cho.hang_doi.front();
         hang_cho.hang_doi.pop_front();
-        hang_cho.vi_tri_node.erase(mssv_duoc_chon);
+        hang_cho.vi_tri_node.erase(mssv_duoc_chon); // Xóa khỏi custom map bằng Key
 
         lop_chinh_thuc.insert(mssv_duoc_chon);
-        
+
         ghi_nhat_ky("DON_LEN_CHINH_THUC", mssv_duoc_chon, ma_mon);
         return "DA_HUY_VA_DON_SINH_VIEN_" + mssv_duoc_chon;
     } else {
@@ -185,12 +184,15 @@ bool rut_khoi_hang_cho(string ma_mon, string mssv) {
 
     auto& hang_cho = ds_cho[ma_mon];
     auto it = hang_cho.vi_tri_node.find(mssv);
-    if (it == hang_cho.vi_tri_node.end()) return false; 
 
+    if (it == hang_cho.vi_tri_node.end()) return false;
+
+    // it->second lấy ra value là Node*
     hang_cho.hang_doi.erase(it->second);
+
+    // Custom unordered_map của chúng ta đã được cập nhật hàm erase(Iterator)
     hang_cho.vi_tri_node.erase(it);
 
     ghi_nhat_ky("RUT_HANG_CHO", mssv, ma_mon);
     return true;
 }
-
