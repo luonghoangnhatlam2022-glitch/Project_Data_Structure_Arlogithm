@@ -1,117 +1,101 @@
 #pragma once
-#include <string>
 
 template <typename K, typename V>
 struct unordered_map {
     struct Node {
-        K first;
-        V second;
-        Node* next;
+        K first; V second; Node* next;
         Node(const K& k) : first(k), second(), next(nullptr) {}
     };
 
-    static const int TABLE_SIZE = 10007;
-    Node* table[TABLE_SIZE];
-    int hashFunction(const K& key) {
-        long long hash = 0;
-        for (size_t i = 0; i < key.length(); i++) {
-            hash = (hash * 31 + key[i]) % TABLE_SIZE;
-        }
-        return hash;
+    int cap;
+    int sz;
+    Node** table;
+
+    // Cấp phát mảng tĩnh và tự động gán nullptr cho toàn bộ phần tử nhờ cặp ngoặc ()
+    unordered_map() : cap(10007), sz(0), table(new Node*[10007]()) {}
+
+
+    int hash(const K& k) {
+        long long h = 0;
+        for (size_t i = 0; i < k.length(); i++) h = (h * 31 + k[i]) % cap;
+        return h;
     }
 
-    unordered_map() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = nullptr;
-        }
-    }
+    void rehash() {
+        Node** old_tbl = table;
+        int old_cap = cap;
 
-    ~unordered_map() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            Node* current = table[i];
-            while (current != nullptr) {
-                Node* temp = current;
-                current = current->next;
-                delete temp;
+        table = new Node*[cap = old_cap * 2 + 1](); // Tạo mảng mới x2 dung lượng
+
+        for (int i = 0; i < old_cap; i++) {
+            for (Node* curr = old_tbl[i]; curr;) {
+                Node* next = curr->next;
+                int idx = hash(curr->first);
+                curr->next = table[idx];
+                table[idx] = curr;
+                curr = next;
             }
         }
     }
 
-    unordered_map(const unordered_map&) = delete;
-    unordered_map& operator=(const unordered_map&) = delete;
-
     struct Iterator {
-        Node* current_node;
+        Node* node; Node** tbl; int bkt; int cap;
+        Iterator(Node* n, Node** t, int b, int c) : node(n), tbl(t), bkt(b), cap(c) {}
 
-        Iterator(Node* n) {
-            current_node = n;
-        }
+        bool operator==(const Iterator& o) const { return node == o.node; }
+        bool operator!=(const Iterator& o) const { return node != o.node; }
+        Node* operator->() { return node; }
 
-        bool operator!=(const Iterator& other) const { return current_node != other.current_node; }
-        bool operator==(const Iterator& other) const { return current_node == other.current_node; }
-
-        Node* operator->() {
-            return current_node;
+        Iterator& operator++() {
+            if (node) node = node->next;
+            while (!node && ++bkt < cap) node = tbl[bkt];
+            return *this;
         }
     };
 
-    Iterator end() {
-        return Iterator(nullptr);
+    Iterator end() { return Iterator(nullptr, table, cap, cap); }
+
+    // Tái sử dụng logic ++ để tìm phần tử đầu tiên siêu gọn
+    Iterator begin() {
+        Iterator it(nullptr, table, -1, cap);
+        return ++it;
     }
 
-    Iterator find(const K& key) {
-        int index = hashFunction(key);
-        Node* current = table[index];
-
-        while (current != nullptr) {
-            if (current->first == key) {
-                return Iterator(current);
-            }
-            current = current->next;
-        }
+    Iterator find(const K& k) {
+        int i = hash(k);
+        for (Node* curr = table[i]; curr; curr = curr->next)
+            if (curr->first == k) return Iterator(curr, table, i, cap);
         return end();
     }
 
-    V& operator[](const K& key) {
-        int index = hashFunction(key);
-        Node* current = table[index];
+    V& operator[](const K& k) {
+        int i = hash(k);
+        for (Node* curr = table[i]; curr; curr = curr->next)
+            if (curr->first == k) return curr->second;
 
-        while (current != nullptr) {
-            if (current->first == key) {
-                return current->second;
-            }
-            current = current->next;
-        }
-        Node* new_node = new Node(key);
-        new_node->next = table[index];
-        table[index] = new_node;
+        // Gộp lệnh tăng size và kiểm tra Load factor trên 1 dòng
+        if (++sz > cap * 0.75) { rehash(); i = hash(k); }
 
-        return table[index]->second;
+        Node* n = new Node(k);
+        n->next = table[i];
+        table[i] = n;
+        return n->second;
     }
 
-    void erase(const K& key) {
-        int index = hashFunction(key);
-        Node* current = table[index];
-        Node* previous = nullptr;
-
-        while (current != nullptr) {
-            if (current->first == key) {
-                if (previous == nullptr) {
-                    table[index] = current->next;
-                } else {
-                    previous->next = current->next;
-                }
-                delete current;
+    void erase(const K& k) {
+        int i = hash(k);
+        Node *curr = table[i], *prev = nullptr;
+        while (curr) {
+            if (curr->first == k) {
+                if (prev) prev->next = curr->next;
+                else table[i] = curr->next;
+                sz--;
                 return;
             }
-            previous = current;
-            current = current->next;
+            prev = curr;
+            curr = curr->next;
         }
     }
 
-    void erase(Iterator it) {
-        if (it.current_node != nullptr) {
-            erase(it.current_node->first);
-        }
-    }
+    void erase(Iterator it) { if (it.node) erase(it.node->first); }
 };
