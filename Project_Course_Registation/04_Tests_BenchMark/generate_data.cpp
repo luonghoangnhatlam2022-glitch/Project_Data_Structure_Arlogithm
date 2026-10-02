@@ -83,7 +83,7 @@ void sinh_data(ll n)
         if (lenhso < 100)
         {
             hp = danh_sach_hoc_phan[random(so_luong_hoc_phan)];
-            sv = 250001 + random(so_luong_sinh_vien);
+            sv = 2500001 + random(so_luong_sinh_vien);
 
             if (danh_sach_sinh_vien[sv][hp] == false)
             {
@@ -103,7 +103,7 @@ void sinh_data(ll n)
 
             while (true)
             {
-                sv_remove = 250001 + random(so_luong_sinh_vien);
+                sv_remove = 2500001 + random(so_luong_sinh_vien);
 
                 if (danh_sach_sinh_vien.find(sv_remove) != danh_sach_sinh_vien.end())
                 {
@@ -131,7 +131,7 @@ void sinh_data(ll n)
         }
         else if (lenhso < 90)
         {
-            sv = 250001 + random(so_luong_sinh_vien);
+            sv = 2500001 + random(so_luong_sinh_vien);
             tep_tin << "GETSV," << sv << "\n";
             dem++;
         }
