@@ -6,7 +6,7 @@
 
 using namespace std;
 
-long long seed = 1111;
+long long seed;
 
 long long random(int x)
 {
@@ -154,6 +154,7 @@ int main()
     int n ;
     cout<<"Nhap so luong sinh vien: ";
     cin>>n;
+    seed=n;
     Ho_Ten(name, n);
     Ngay_Thang(sinh, n);
 

@@ -9,7 +9,7 @@
 using namespace std;
 using ll = long long;
 
-ll seed = 49;
+ll seed;
 ll random(int x)
 {
     seed = (1103515245 * seed + 12345) % 2147483648;
@@ -151,6 +151,7 @@ int main()
     ll solenh;
     cout<<"Nhap so lenh truy van: ";
     cin >> solenh;
+    seed=solenh;
     nhap_danh_sach_hoc_phan();
     dem_so_sinh_vien();
     sinh_data(solenh);
