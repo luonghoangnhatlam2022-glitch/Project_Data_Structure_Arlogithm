@@ -80,7 +80,7 @@ void sinh_data(ll n)
     {
         int lenhso = random(100);
 
-        if (lenhso < 60)
+        if (lenhso < 100)
         {
             hp = danh_sach_hoc_phan[random(so_luong_hoc_phan)];
             sv = 250001 + random(so_luong_sinh_vien);
