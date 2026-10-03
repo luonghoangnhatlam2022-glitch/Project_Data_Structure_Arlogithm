@@ -14,6 +14,18 @@ struct unordered_map {
     // Cấp phát mảng tĩnh và tự động gán nullptr cho toàn bộ phần tử nhờ cặp ngoặc ()
     unordered_map() : cap(10007), sz(0), table(new Node*[10007]()) {}
 
+    // BỔ SUNG: Hàm hủy để dọn dẹp bộ nhớ khi Bảng băm kết thúc vòng đời
+    ~unordered_map() {
+        for (int i = 0; i < cap; i++) {
+            Node* curr = table[i];
+            while (curr) {
+                Node* next = curr->next;
+                delete curr; // Xóa từng nút
+                curr = next;
+            }
+        }
+        delete[] table; // Xóa mảng con trỏ
+    }
 
     int hash(const K& k) {
         long long h = 0;
@@ -36,6 +48,8 @@ struct unordered_map {
                 curr = next;
             }
         }
+        // BỔ SUNG: Xóa mảng cũ sau khi đã chuyển hết dữ liệu sang mảng mới
+        delete[] old_tbl;
     }
 
     struct Iterator {
@@ -89,6 +103,9 @@ struct unordered_map {
             if (curr->first == k) {
                 if (prev) prev->next = curr->next;
                 else table[i] = curr->next;
+
+                // BỔ SUNG: Trả lại bộ nhớ của nút bị xóa thay vì chỉ ngắt liên kết
+                delete curr;
                 sz--;
                 return;
             }
