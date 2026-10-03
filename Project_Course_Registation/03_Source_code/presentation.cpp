@@ -24,6 +24,19 @@ void in_menu()
     cout << "Nhap lua chon cua ban (0 - 7): ";
 }
 
+void in_menu_test()
+{
+    cout << "\n============================================\n";
+    cout << "     HE THONG DANG KY HOC PHAN & WAITLIST   \n";
+    cout << "============================================\n";
+    cout << "1. Chay file test du lieu \n";
+    cout << "2. Chay file test 10,000 lenh ADD \n";
+    cout << "3. Chay file test 10,000 lenh GET \n";
+    cout << "0. Quay lai menu chinh\n";
+    cout << "============================================\n";
+    cout << "Nhap lua chon cua ban (0 - 3): ";
+}
+
 void man_hinh_tim_sinh_vien() {
     string ma_sv;
     cout << "-> Nhap MSSV can tra cuu: ";
@@ -132,6 +145,33 @@ void man_hinh_chay_file_test(string duong_dan_file)
     {
         Benchmark(duong_dan_file);
     }
+//Giao diện khi chọn 7
+void chay_giao_dien_test() {
+    int lua_chon = -1;
+    while (true) {
+        in_menu_test();
+        if (!(cin >> lua_chon)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "[Loi] Vui long nhap so tu 0 den 3!\n";
+            continue;
+        }
+
+        if (lua_chon == 0) {
+            return;
+            break;
+        }
+
+        switch (lua_chon) {
+            case 1: man_hinh_chay_file_test("../02_Data/students_test.csv");; break;
+            case 2: man_hinh_chay_file_test("../02_Data/students_add.csv"); break;
+            case 3: man_hinh_chay_file_test("../02_Data/students_get.csv"); break;
+            default:
+                cout << "[Loi] Lua chon khong hop le, vui long chon lai!\n";
+                break;
+        }
+    }
+}
 
 // Vòng lặp điều khiển chính của giao diện
 void chay_giao_dien() {
@@ -141,7 +181,7 @@ void chay_giao_dien() {
         if (!(cin >> lua_chon)) {
             cin.clear();
             cin.ignore(10000, '\n');
-            cout << "[Loi] Vui long nhap so tu 0 den 3!\n";
+            cout << "[Loi] Vui long nhap so tu 0 den 7!\n";
             continue;
         }
 
@@ -157,9 +197,7 @@ void chay_giao_dien() {
             case 4: man_hinh_huy_mon(); break;
             case 5: man_hinh_rut_hang_cho(); break;
             case 6: man_hinh_xem_lich_su(); break;
-            case 7:
-                man_hinh_chay_file_test("../02_Data/students_test.csv");
-                break;
+            case 7: chay_giao_dien_test(); break;
             default:
                 cout << "[Loi] Lua chon khong hop le, vui long chon lai!\n";
                 break;
