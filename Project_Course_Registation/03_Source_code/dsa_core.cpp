@@ -116,7 +116,12 @@ string dang_ky_mon(string ma_mon, string mssv) {
 
     // Bước 2: Kiểm tra sinh viên đã có trong danh sách chính thức chưa
     auto &lop_chinh_thuc = ds_chinh_thuc[ma_mon];
-    if (lop_chinh_thuc.find(mssv) != lop_chinh_thuc.end()) return "DA_DANG_KY_CHINH_THUC";
+    if (lop_chinh_thuc.find(mssv) != lop_chinh_thuc.end()) {
+        ghi_nhat_ky("DANG_KY_THANH_CONG", mssv, ma_mon);
+        return "DA_DANG_KY_CHINH_THUC";
+    }
+
+
 
     // Bước 3: Kiểm tra sinh viên đã xếp hàng ở môn này chưa
     auto &hang_cho = ds_cho[ma_mon];
